@@ -4,6 +4,9 @@
     <string name="menu_sort">Sort By</string>
     <string name="menu_sort_popular">Most Popular</string>
     <string name="menu_sort_top_rated">Top Rated</string>
-    <string name="rating_text">%s//10</string>
+    <string name="rating_text">%s/10</string>
     <string name="release_date">Released on %s</string>
+
+    <string name="parameter_image_size">w342</string>
+    <string name="parameter_image_detail_size">w500</string>
 </resources>

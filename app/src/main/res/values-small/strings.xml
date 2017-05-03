@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parameter_image_size">w185</string>
+    <string name="parameter_image_detail_size">w342</string>
+</resources>
