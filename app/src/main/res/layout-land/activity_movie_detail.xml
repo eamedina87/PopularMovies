@@ -5,9 +5,10 @@
     <ImageView
         android:id="@+id/movie_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:src="@mipmap/ic_launcher_round"
         android:scaleType="centerCrop"
+        android:layout_toLeftOf="@+id/center"
         />
 
 
@@ -15,19 +16,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/movie_image"
-        android:layout_alignRight="@+id/movie_image"
+        android:layout_alignRight="@+id/movie_original_title"
         android:layout_alignTop="@+id/movie_original_title"
         android:layout_alignBottom="@+id/movie_image"
         android:background="@color/colorAccent"
         android:alpha="0.7"
         />
 
-
     <TextView
         android:id="@+id/movie_original_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/movie_image"
         android:layout_alignBottom="@+id/movie_image"
         android:layout_toRightOf="@+id/movie_rating_text"
         android:layout_marginLeft="5dp"
@@ -62,8 +61,9 @@
         android:layout_toRightOf="@id/movie_rating"
         />
 
+
     <ScrollView
-        android:layout_below="@+id/movie_image"
+        android:layout_toRightOf="@+id/center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -96,6 +96,11 @@
 
     </ScrollView>
 
-
+    <View
+        android:id="@+id/center"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        />
 
 </RelativeLayout>
