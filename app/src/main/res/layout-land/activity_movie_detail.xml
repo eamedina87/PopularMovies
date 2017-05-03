@@ -6,6 +6,7 @@
         android:id="@+id/movie_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:adjustViewBounds="true"
         android:src="@mipmap/ic_launcher_round"
         android:scaleType="centerCrop"
         android:layout_toLeftOf="@+id/center"
@@ -64,6 +65,8 @@
 
     <ScrollView
         android:layout_toRightOf="@+id/center"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/movie_original_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">

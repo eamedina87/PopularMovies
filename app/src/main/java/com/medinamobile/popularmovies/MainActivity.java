@@ -1,7 +1,6 @@
 package com.medinamobile.popularmovies;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,10 +14,16 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieListener, LoadMoviesFromTMDB.LoadMoviesListener {
+
+    @BindView(R.id.pb_loading)
     ProgressBar pb_loading;
+    @BindView(R.id.tv_error_display)
     TextView tv_error_display;
+    @BindView(R.id.rv_movies_list)
     RecyclerView recyclerView;
     private MovieAdapter adapter;
     private boolean isPopularSorted;
@@ -28,16 +33,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        pb_loading = (ProgressBar) findViewById(R.id.pb_loading);
-        tv_error_display = (TextView) findViewById(R.id.tv_error_display);
-        recyclerView = (RecyclerView) findViewById(R.id.rv_movies_list);
+        ButterKnife.bind(this);
 
         String parameter = Utils.PARAMETER_POPULAR;
         String urlString = Utils.getUrlStringSortedBy(parameter);
 
         if (savedInstanceState==null){
-            new loadMoviesFromTMDB().execute(urlString);
+            LoadMoviesFromTMDB loadTask = new LoadMoviesFromTMDB(this);
+            loadTask.execute(urlString);
             isPopularSorted = true;
         }
 
@@ -58,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 if (!isPopularSorted){
                     String parameter = Utils.PARAMETER_POPULAR;
                     String urlString = Utils.getUrlStringSortedBy(parameter);
-                    new loadMoviesFromTMDB().execute(urlString);
+                    LoadMoviesFromTMDB loadTask = new LoadMoviesFromTMDB(this);
+                    loadTask.execute(urlString);
                     isPopularSorted = true;
                 }
                 item.setChecked(true);
@@ -68,7 +72,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 if (isPopularSorted){
                     String parameter = Utils.PARAMETER_TOP_RATED;
                     String urlString = Utils.getUrlStringSortedBy(parameter);
-                    new loadMoviesFromTMDB().execute(urlString);
+                    LoadMoviesFromTMDB loadTask = new LoadMoviesFromTMDB(this);
+                    loadTask.execute(urlString);
                     isPopularSorted = false;
                 }
                 item.setChecked(true);
@@ -86,33 +91,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         startActivity(intent);
     }
 
-    private class loadMoviesFromTMDB extends AsyncTask<String, Void, ArrayList<Movie>>{
 
-        @Override
-        protected void onPreExecute() {
-            pb_loading.setVisibility(View.VISIBLE);
-            super.onPreExecute();
-        }
-
-        @Override
-        protected ArrayList<Movie> doInBackground(String... strings) {
-            ArrayList<Movie> movies = Utils.getMovies(strings[0]);
-
-            return movies;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> movies) {
-            pb_loading.setVisibility(View.INVISIBLE);
-            if (movies==null){
-                showErrorMessage();
-            } else {
-                showMoviesList();
-                setMoviesForRecyclerView(movies);
-            }
-            super.onPostExecute(movies);
-        }
-    }
 
     private void setMoviesForRecyclerView(ArrayList<Movie> movies) {
         this.movies = movies;
@@ -143,15 +122,44 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("movies", movies);
+        outState.putBoolean("sortCriteria",isPopularSorted);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         this.movies = savedInstanceState.getParcelableArrayList("movies");
+        this.isPopularSorted = savedInstanceState.getBoolean("sortCriteria");
         if (movies!=null){
             setMoviesForRecyclerView(movies);
         }
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (isPopularSorted){
+            menu.findItem(R.id.action_sort_popular).setChecked(true);
+        } else {
+            menu.findItem(R.id.action_sort_top_rated).setChecked(true);
+        }
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void onPreExecute() {
+        pb_loading.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onPostExecute(ArrayList<Movie> movies) {
+        pb_loading.setVisibility(View.INVISIBLE);
+        if (movies==null){
+            showErrorMessage();
+        } else {
+            showMoviesList();
+            setMoviesForRecyclerView(movies);
+        }
     }
 }

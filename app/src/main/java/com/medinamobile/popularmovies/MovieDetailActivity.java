@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Supertel on 2/5/17.
  */
@@ -19,25 +22,24 @@ import com.squareup.picasso.Picasso;
 public class MovieDetailActivity extends AppCompatActivity {
 
     private Movie movie;
-    private ImageView image;
-    private TextView title;
-    private RatingBar rating;
-    private TextView rating_text;
-    private TextView overview;
-    private TextView release_date;
+    @BindView(R.id.movie_image)
+    ImageView image;
+    @BindView(R.id.movie_original_title)
+    TextView title;
+    @BindView(R.id.movie_rating)
+    RatingBar rating;
+    @BindView(R.id.movie_rating_text)
+    TextView rating_text;
+    @BindView(R.id.movie_overview)
+    TextView overview;
+    @BindView(R.id.movie_release_date)
+    TextView release_date;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
-        image = (ImageView) findViewById(R.id.movie_image);
-        title = (TextView) findViewById(R.id.movie_original_title);
-        rating = (RatingBar) findViewById(R.id.movie_rating);
-        rating_text = (TextView) findViewById(R.id.movie_rating_text);
-        overview = (TextView) findViewById(R.id.movie_overview);
-        release_date = (TextView) findViewById(R.id.movie_release_date);
-
+        ButterKnife.bind(this);
         Intent intent = getIntent();
         if (intent!=null && intent.hasExtra(Intent.EXTRA_CHOSEN_COMPONENT)){
             this.movie = intent.getParcelableExtra(Intent.EXTRA_CHOSEN_COMPONENT);

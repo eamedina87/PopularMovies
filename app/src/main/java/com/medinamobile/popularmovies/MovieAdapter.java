@@ -1,6 +1,7 @@
 package com.medinamobile.popularmovies;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Optional;
 
 /**
  * Created by Supertel on 2/5/17.
@@ -59,14 +64,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView image;
-        private TextView title;
+        @BindView(R.id.movie_image)
+        ImageView image;
+        @Nullable @BindView(R.id.movie_original_title)
+        TextView title;
         private int position;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = (ImageView) itemView.findViewById(R.id.movie_image);
-            title = (TextView) itemView.findViewById(R.id.movie_original_title);
+            ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
