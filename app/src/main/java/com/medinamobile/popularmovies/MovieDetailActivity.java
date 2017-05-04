@@ -24,6 +24,8 @@ public class MovieDetailActivity extends AppCompatActivity {
     private Movie movie;
     @BindView(R.id.movie_image)
     ImageView image;
+    @BindView(R.id.movie_thumbnail)
+    ImageView thumbnail;
     @BindView(R.id.movie_original_title)
     TextView title;
     @BindView(R.id.movie_rating)
@@ -53,6 +55,9 @@ public class MovieDetailActivity extends AppCompatActivity {
         Context context = MovieDetailActivity.this;
         String urlString = Utils.getUrlForMovieImage(movie.getBackdrop_path(), Utils.PARAMETER_SIZE_780);
         Picasso.with(context).load(urlString).into(image);
+        urlString = Utils.getUrlForMovieImage(movie.getPoster_path(), Utils.PARAMETER_SIZE_154);
+        Picasso.with(context).load(urlString).into(thumbnail);
+
         //--
         title.setText(movie.getOriginal_title());
         String vote_average = movie.getVote_average();

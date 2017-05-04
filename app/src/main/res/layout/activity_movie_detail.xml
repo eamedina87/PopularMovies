@@ -70,11 +70,10 @@
         android:padding="16dp">
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            >
             <TextView
                 android:id="@+id/movie_overview"
                 android:layout_width="match_parent"
@@ -88,10 +87,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:gravity="left|center_vertical"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:layout_alignTop="@+id/movie_thumbnail"
+                android:layout_alignBottom="@+id/movie_thumbnail"
+                android:layout_toRightOf="@+id/movie_thumbnail"
                 />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/movie_thumbnail"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/movie_overview"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="16dp"
+                android:src="@mipmap/ic_launcher"
+
+                />
+
+        </RelativeLayout>
 
 
 

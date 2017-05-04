@@ -28,7 +28,7 @@ public class Utils {
     private static final String QUERY_API = "api_key";
     /* THE API KEY must be obtained from The Movie Database
      https://www.themoviedb.org */
-    private static final String TMDB_API_KEY = "YOUR_API_KEY";
+    private static final String TMDB_API_KEY = "1008006bf5a5160b9e5907ac76def8f2";
 
     private static final String IMAGE_URL_BASE = "http://image.tmdb.org/t/p/";
     public static final String PARAMETER_SIZE_92 = "w92";
