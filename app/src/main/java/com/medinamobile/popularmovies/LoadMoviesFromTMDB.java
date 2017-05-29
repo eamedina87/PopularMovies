@@ -1,13 +1,16 @@
 package com.medinamobile.popularmovies;
 
 import android.os.AsyncTask;
-import android.view.View;
+
+import com.medinamobile.popularmovies.data.Movie;
 
 import java.util.ArrayList;
 
 /**
- * Created by Supertel on 3/5/17.
+ * Created by Erick Medina on 3/5/17.
  */
+
+//TODO Change AsyncTask to AsyncTaskLoader
 public class LoadMoviesFromTMDB extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     private LoadMoviesListener loadMoviesListener;

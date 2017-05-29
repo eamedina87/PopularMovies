@@ -1,6 +1,7 @@
 package com.medinamobile.popularmovies;
 
 import android.content.Context;
+import android.database.DatabaseUtils;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,17 +10,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.medinamobile.popularmovies.data.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Optional;
 
 /**
- * Created by Supertel on 2/5/17.
+ * Created by Erick Medina on 2/5/17.
  */
+
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
 
@@ -49,7 +51,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
         Context context = holder.itemView.getContext();
         String imageUrl = Utils.getUrlForMovieImage(movie.getPoster_path(), Utils.PARAMETER_SIZE_500);
-        Picasso.with(context).load(imageUrl).into(holder.image);
+        Picasso.with(context).load(imageUrl).placeholder(R.mipmap.ic_loading).into(holder.image);
         holder.position = position;
     }
 

@@ -18,6 +18,11 @@
                 android:orderInCategory="2"
                 android:title="@string/menu_sort_top_rated"
                 />
+            <!--DONE Create a Favorite Option Item-->
+            <item android:id="@+id/action_sort_favorite"
+                android:orderInCategory="3"
+                android:title="@string/menu_sort_favorite"
+                />
 
         </group>
         </menu>

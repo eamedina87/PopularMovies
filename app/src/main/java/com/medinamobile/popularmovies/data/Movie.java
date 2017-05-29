@@ -1,19 +1,20 @@
-package com.medinamobile.popularmovies;
+package com.medinamobile.popularmovies.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Supertel on 2/5/17.
+ * Created by Erick Medina on 2/5/17.
  */
 
 public class Movie implements Parcelable{
 
+    private int _id;
     private String title;
     private String poster_path;
     private String backdrop_path;
     private String overview;
-    private String id;
+    private String movie_id;
     private String original_title;
     private String vote_average;
     private String release_date;
@@ -28,7 +29,7 @@ public class Movie implements Parcelable{
         setPoster_path(in.readString());
         setBackdrop_path(in.readString());
         setOverview(in.readString());
-        setId(in.readString());
+        setMovie_id(in.readString());
         setOriginal_title(in.readString());
         setVote_average(in.readString());
         setRelease_date(in.readString());
@@ -40,7 +41,7 @@ public class Movie implements Parcelable{
         parcel.writeString(getPoster_path());
         parcel.writeString(getBackdrop_path());
         parcel.writeString(getOverview());
-        parcel.writeString(getId());
+        parcel.writeString(getMovie_id());
         parcel.writeString(getOriginal_title());
         parcel.writeString(getVote_average());
         parcel.writeString(getRelease_date());
@@ -96,12 +97,12 @@ public class Movie implements Parcelable{
         this.overview = overview;
     }
 
-    public String getId() {
-        return id;
+    public String getMovie_id() {
+        return movie_id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setMovie_id(String movie_id) {
+        this.movie_id = movie_id;
     }
 
     public String getOriginal_title() {
@@ -129,6 +130,11 @@ public class Movie implements Parcelable{
     }
 
 
+    public int get_id() {
+        return _id;
+    }
 
-
+    public void set_id(int _id) {
+        this._id = _id;
+    }
 }

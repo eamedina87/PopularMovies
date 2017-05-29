@@ -1,7 +1,11 @@
 package com.medinamobile.popularmovies;
 
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
+
+import com.medinamobile.popularmovies.data.Movie;
+import com.medinamobile.popularmovies.data.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +21,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * Created by Supertel on 2/5/17.
+ * Created by Erick Medina on 2/5/17.
  */
 
 public class Utils {
@@ -106,7 +110,7 @@ public class Utils {
                     Movie movie = new Movie();
                     JSONObject jsonMovie = results.getJSONObject(cont);
                     movie.setBackdrop_path(jsonMovie.getString(API_MOVIE_BACKDROP_PATH));
-                    movie.setId(jsonMovie.getString(API_MOVIE_ID));
+                    movie.setMovie_id(jsonMovie.getString(API_MOVIE_ID));
                     movie.setOriginal_title(jsonMovie.getString(API_MOVIE_ORIGINAL_TITLE));
                     movie.setOverview(jsonMovie.getString(API_MOVIE_OVERVIEW));
                     movie.setPoster_path(jsonMovie.getString(API_MOVIE_POSTER_PATH));
@@ -139,7 +143,31 @@ public class Utils {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
+        urlString = urlString.replace("'","");
         return urlString;
+    }
+
+    public static Movie getMovieFromCursor(Cursor data) {
+        Movie movie = new Movie();
+        movie.setRelease_date(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)));
+        movie.setVote_average(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)));
+        movie.setOriginal_title(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE)));
+        movie.set_id(data.getInt(data.getColumnIndex(MovieContract.MovieEntry._ID)));
+        movie.setBackdrop_path(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)));
+        movie.setPoster_path(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH)));
+        movie.setTitle(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE)));
+        movie.setMovie_id(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)));
+        movie.setOverview(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)));
+        return movie;
+    }
+
+    public static ArrayList<Movie> getMoviesFromCursor(Cursor data) {
+        ArrayList<Movie> movies = new ArrayList<>();
+        data.moveToPosition(-1);
+        while (data.moveToNext()){
+            Movie movie = getMovieFromCursor(data);
+            movies.add(movie);
+        }
+        return movies;
     }
 }

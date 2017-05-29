@@ -9,4 +9,5 @@
 
     <string name="parameter_image_size">w342</string>
     <string name="parameter_image_detail_size">w500</string>
+    <string name="menu_sort_favorite">Favorites</string>
 </resources>
