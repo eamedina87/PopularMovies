@@ -1,4 +1,4 @@
-package com.medinamobile.popularmovies.data;
+package com.medinamobile.popularmovies.loaders;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +10,8 @@ import android.support.v4.content.Loader;
 import android.util.Log;
 
 import com.medinamobile.popularmovies.Utils;
+import com.medinamobile.popularmovies.data.Movie;
+import com.medinamobile.popularmovies.data.MovieContract;
 
 import java.util.ArrayList;
 

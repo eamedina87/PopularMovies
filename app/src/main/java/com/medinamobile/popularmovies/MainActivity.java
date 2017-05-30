@@ -12,16 +12,16 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.medinamobile.popularmovies.data.FavoriteLoader;
+import com.medinamobile.popularmovies.loaders.FavoriteLoader;
 import com.medinamobile.popularmovies.data.Movie;
-import com.medinamobile.popularmovies.data.MoviesFromAPILoader;
+import com.medinamobile.popularmovies.loaders.MoviesFromAPILoader;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-
+//(TODO) BUG: When in Favorites, go to detail, push back, loads another list
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieListener,
          FavoriteLoader.FavoriteCallbacks, MoviesFromAPILoader.MoviesLoaderCallbacks {
 
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onMovieClicked(Movie movie) {
-        Intent intent = new Intent(MainActivity.this, MovieDetailActivity.class);
+        Intent intent = new Intent(MainActivity.this, DetailScrollingActivity.class);
         intent.putExtra(Intent.EXTRA_CHOSEN_COMPONENT, movie);
         startActivity(intent);
     }

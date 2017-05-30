@@ -1,10 +1,11 @@
-package com.medinamobile.popularmovies.data;
+package com.medinamobile.popularmovies.loaders;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 import com.medinamobile.popularmovies.Utils;
+import com.medinamobile.popularmovies.data.Movie;
 
 import java.util.ArrayList;
 

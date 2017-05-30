@@ -1,4 +1,4 @@
-package com.medinamobile.popularmovies.data;
+package com.medinamobile.popularmovies.loaders;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
 import com.medinamobile.popularmovies.Utils;
+import com.medinamobile.popularmovies.data.Movie;
 
 import java.util.ArrayList;
 

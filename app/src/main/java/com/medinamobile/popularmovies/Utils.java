@@ -1,7 +1,10 @@
 package com.medinamobile.popularmovies;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +45,7 @@ public class Utils {
     private static final String QUERY_API = "api_key";
     /* THE API KEY must be obtained from The Movie Database
      https://www.themoviedb.org */
-    private static final String TMDB_API_KEY = "1008006bf5a5160b9e5907ac76def8f2";
+    private static final String TMDB_API_KEY = "YOUR_API_KEY";
 
     private static final String IMAGE_URL_BASE = "http://image.tmdb.org/t/p/";
     public static final String PARAMETER_SIZE_92 = "w92";
@@ -205,5 +208,25 @@ public class Utils {
         bundle.putString(Utils.KEY_URL, url);
         bundle.putInt(Utils.KEY_SORT_INDEX, index);
         return bundle;
+    }
+
+    public static ContentValues getContentValues(Movie movie) {
+        ContentValues values = new ContentValues();
+        values.put(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH, DatabaseUtils.sqlEscapeString(movie.getBackdrop_path()));
+        values.put(MovieContract.MovieEntry.COLUMN_MOVIE_ID, movie.getMovie_id());
+        values.put(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE, DatabaseUtils.sqlEscapeString(movie.getOriginal_title()));
+        values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, DatabaseUtils.sqlEscapeString(movie.getOverview()));
+        values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, DatabaseUtils.sqlEscapeString(movie.getPoster_path()));
+        values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getRelease_date());
+        values.put(MovieContract.MovieEntry.COLUMN_TITLE, DatabaseUtils.sqlEscapeString(movie.getTitle()));
+        values.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVote_average());
+        return values;
+    }
+
+    public static boolean isMovieFavorited(Context context, String movieId) {
+        Uri mUri = MovieContract.MovieEntry.FAVORITES_CONTENT_URI.buildUpon().appendPath(movieId).build();
+        Cursor cursor = context.getContentResolver().query(mUri, null, null, null, null);
+        return cursor.getCount()>0;
+
     }
 }
