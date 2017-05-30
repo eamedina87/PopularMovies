@@ -13,6 +13,16 @@
         />
 
 
+    <android.support.v7.widget.AppCompatImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_above="@id/movie_original_title"
+        android:layout_alignRight="@id/movie_image"
+        android:layout_margin="8dp"
+        android:id="@+id/movie_favorite"
+        android:background="@drawable/favorite_button_background"
+        />
+
     <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

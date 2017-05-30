@@ -1,11 +1,6 @@
 package com.medinamobile.popularmovies;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -19,7 +14,7 @@ import android.widget.TextView;
 
 import com.medinamobile.popularmovies.data.FavoriteLoader;
 import com.medinamobile.popularmovies.data.Movie;
-import com.medinamobile.popularmovies.data.MovieContract;
+import com.medinamobile.popularmovies.data.MoviesFromAPILoader;
 
 import java.util.ArrayList;
 
@@ -27,10 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-
-//LoaderCallbacks are for Favorite Movies Callbacks
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieListener,
-        LoadMoviesFromTMDB.LoadMoviesListener, FavoriteLoader.FavoriteCallbacks{
+         FavoriteLoader.FavoriteCallbacks, MoviesFromAPILoader.MoviesLoaderCallbacks {
 
 
     @BindView(R.id.pb_loading)
@@ -40,16 +33,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @BindView(R.id.rv_movies_list)
     RecyclerView recyclerView;
 
-    private static final int SORT_POPULAR = 1000;
-    private static final int SORT_TOP_RATED = 1001;
-    private static final int SORT_FAVORITE = 1002;
-
-    private static final String KEY_MOVIES = "movies";
-    private static final String KEY_SORT_INDEX = "sortIndex";
-
     private MovieAdapter adapter;
     private int sortIndex;
     private ArrayList<Movie> movies;
+    private MoviesFromAPILoader loaderCallbacks;
+    private ArrayList<Movie> popular_movies;
+    private ArrayList<Movie> top_movies;
+    private String urlString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +47,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        String parameter = Utils.PARAMETER_POPULAR;
-        String urlString = Utils.getUrlStringSortedBy(parameter);
 
         if (savedInstanceState==null){
-            //TODO Call AsyncTaskLoader
-            LoadMoviesFromTMDB loadTask = new LoadMoviesFromTMDB(this);
-            loadTask.execute(urlString);
-            sortIndex = SORT_POPULAR;
+            String parameter = Utils.PARAMETER_POPULAR;
+            urlString = Utils.getUrlStringSortedBy(parameter);
+            sortIndex = Utils.SORT_POPULAR;
+            loaderCallbacks = new MoviesFromAPILoader(this, this);
+
+            getSupportLoaderManager().initLoader(
+                    MoviesFromAPILoader.ID_MOVIE_FROM_API_LOADER,
+                    Utils.createBundle(urlString, sortIndex),
+                    loaderCallbacks);
         }
+
+
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getSupportLoaderManager().destroyLoader(MoviesFromAPILoader.ID_MOVIE_FROM_API_LOADER);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,35 +81,40 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int itemId = item.getItemId();
         switch (itemId){
             case R.id.action_sort_popular:{
-                if (sortIndex!=SORT_POPULAR){
-                    sortIndex = SORT_POPULAR;
+                if (sortIndex!= Utils.SORT_POPULAR){
+                    sortIndex = Utils.SORT_POPULAR;
                     String parameter = Utils.PARAMETER_POPULAR;
-                    String urlString = Utils.getUrlStringSortedBy(parameter);
-                    LoadMoviesFromTMDB loadTask = new LoadMoviesFromTMDB(this);
-                    loadTask.execute(urlString);
-
+                    urlString = Utils.getUrlStringSortedBy(parameter);
+                    getSupportLoaderManager().restartLoader(
+                            MoviesFromAPILoader.ID_MOVIE_FROM_API_LOADER,
+                            Utils.createBundle(urlString, sortIndex),
+                            loaderCallbacks);
+                    destroyFavoritesLoader();
                 }
                 item.setChecked(true);
                 return true;
             }
             case R.id.action_sort_top_rated:{
-                if (sortIndex!=SORT_TOP_RATED){
-                    sortIndex = SORT_TOP_RATED;
+                if (sortIndex!= Utils.SORT_TOP_RATED){
+                    sortIndex = Utils.SORT_TOP_RATED;
                     String parameter = Utils.PARAMETER_TOP_RATED;
-                    String urlString = Utils.getUrlStringSortedBy(parameter);
-                    LoadMoviesFromTMDB loadTask = new LoadMoviesFromTMDB(this);
-                    loadTask.execute(urlString);
-
+                    urlString = Utils.getUrlStringSortedBy(parameter);
+                    getSupportLoaderManager().restartLoader(
+                            MoviesFromAPILoader.ID_MOVIE_FROM_API_LOADER,
+                            Utils.createBundle(urlString, sortIndex),
+                            loaderCallbacks);
+                    destroyFavoritesLoader();
                 }
                 item.setChecked(true);
                 return true;
             }
             case R.id.action_sort_favorite:{
-                if (sortIndex!=SORT_FAVORITE){
-                    sortIndex = SORT_FAVORITE;
-                    FavoriteLoader loader = new FavoriteLoader(this, this);
-                    getSupportLoaderManager().initLoader(FavoriteLoader.ID_FAVORITES_LOADER, null, loader);
-
+                if (sortIndex!= Utils.SORT_FAVORITE){
+                    sortIndex = Utils.SORT_FAVORITE;
+                    getSupportLoaderManager().initLoader(
+                            FavoriteLoader.ID_FAVORITES_LOADER,
+                            null,
+                            new FavoriteLoader(this, this));
                 }
                 item.setChecked(true);
                 return true;
@@ -117,6 +122,10 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void destroyFavoritesLoader() {
+        getSupportLoaderManager().destroyLoader(FavoriteLoader.ID_FAVORITES_LOADER);
     }
 
     @Override
@@ -130,6 +139,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void setMoviesForRecyclerView(ArrayList<Movie> movies) {
         this.movies = movies;
+        if (sortIndex==Utils.SORT_POPULAR){
+            popular_movies = movies;
+        } else if (sortIndex == Utils.SORT_TOP_RATED){
+            top_movies = movies;
+        }
+
         if (adapter==null){
             GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this,
                     2, LinearLayoutManager.VERTICAL, false);
@@ -155,28 +170,38 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(KEY_MOVIES, movies);
-        outState.putInt(KEY_SORT_INDEX,sortIndex);
+        outState.putParcelableArrayList(Utils.KEY_MOVIES, movies);
+        outState.putParcelableArrayList(Utils.KEY_POPULAR_MOVIES, popular_movies);
+        outState.putParcelableArrayList(Utils.KEY_TOP_MOVIES, top_movies);
+        outState.putInt(Utils.KEY_SORT_INDEX,sortIndex);
+        outState.putString(Utils.KEY_URL, urlString);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        this.movies = savedInstanceState.getParcelableArrayList(KEY_MOVIES);
-        this.sortIndex = savedInstanceState.getInt(KEY_SORT_INDEX);
-        if (movies!=null){
-            setMoviesForRecyclerView(movies);
-        }
+        this.movies = savedInstanceState.getParcelableArrayList(Utils.KEY_MOVIES);
+        this.popular_movies = savedInstanceState.getParcelableArrayList(Utils.KEY_POPULAR_MOVIES);
+        this.top_movies = savedInstanceState.getParcelableArrayList(Utils.KEY_TOP_MOVIES);
+        this.sortIndex = savedInstanceState.getInt(Utils.KEY_SORT_INDEX);
+        this.urlString = savedInstanceState.getString(Utils.KEY_URL);
+        loaderCallbacks = new MoviesFromAPILoader(this, this);
+        loaderCallbacks.setMovies(popular_movies, top_movies);
+        getSupportLoaderManager().initLoader(
+                MoviesFromAPILoader.ID_MOVIE_FROM_API_LOADER,
+                Utils.createBundle(urlString, sortIndex),
+                loaderCallbacks);
+
         super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (sortIndex==SORT_POPULAR){
+        if (sortIndex== Utils.SORT_POPULAR){
             menu.findItem(R.id.action_sort_popular).setChecked(true);
-        } else if (sortIndex==SORT_TOP_RATED){
+        } else if (sortIndex== Utils.SORT_TOP_RATED){
             menu.findItem(R.id.action_sort_top_rated).setChecked(true);
-        } else if (sortIndex==SORT_FAVORITE){
+        } else if (sortIndex== Utils.SORT_FAVORITE){
             menu.findItem(R.id.action_sort_favorite).setChecked(true);
         }
 
@@ -201,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     @Override
     public void onFavoritesReady(ArrayList<Movie> movies) {
-        if (SORT_FAVORITE == sortIndex) setMoviesForRecyclerView(movies);
+        if (Utils.SORT_FAVORITE == sortIndex) setMoviesForRecyclerView(movies);
     }
 
     @Override

@@ -18,7 +18,7 @@
         android:layout_alignLeft="@+id/movie_image"
         android:layout_alignRight="@+id/movie_image"
         android:layout_alignTop="@+id/movie_original_title"
-        android:layout_alignBottom="@+id/movie_image"
+        android:layout_alignBottom="@+id/movie_release_date"
         android:background="@color/colorAccent"
         android:alpha="0.7"
         />
@@ -29,15 +29,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/movie_image"
-        android:layout_alignBottom="@+id/movie_image"
-        android:layout_toRightOf="@+id/movie_rating_text"
-        android:layout_marginLeft="5dp"
+        android:layout_above="@id/movie_release_date"
         android:lines="1"
         android:ellipsize="end"
-        android:textSize="16sp"
+        android:textAppearance="@style/DetailMovieTitle"
         android:text="@string/app_name"
         android:gravity="right|center_vertical"
-        android:padding="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        />
+
+    <TextView
+        android:id="@+id/movie_release_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:text="(2016)"
+        android:layout_alignRight="@id/movie_original_title"
+        android:layout_alignBottom="@+id/movie_image"
+        android:gravity="right|center_vertical"
+        android:textAppearance="@style/DetailMovieSubtitle"
+        android:paddingRight="5dp"
+        android:paddingBottom="5dp"
         />
 
     <RatingBar
@@ -55,16 +68,27 @@
         android:id="@+id/movie_rating_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
+
         android:gravity="left|bottom"
-        android:textSize="10sp"
+        android:textAppearance="@style/DetailMovieSubtitle"
+
         android:layout_alignTop="@+id/movie_original_title"
         android:layout_alignBottom="@+id/movie_rating"
         android:layout_toRightOf="@+id/movie_rating"
         />
 
+    <android.support.v7.widget.AppCompatImageButton
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/movie_original_title"
+        android:layout_margin="8dp"
+        android:id="@+id/movie_favorite"
+        android:background="@drawable/favorite_button_background"
+        />
+
     <ScrollView
-        android:layout_below="@+id/movie_image"
+        android:layout_below="@+id/movie_release_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -78,8 +102,8 @@
                 android:id="@+id/movie_overview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
                 android:gravity="left|center_vertical"
+                android:textAppearance="@style/DetailMovieOverview"
                 />
 
             <ImageView
@@ -92,25 +116,7 @@
                 android:src="@mipmap/ic_launcher"
                 />
 
-            <TextView
-                android:id="@+id/movie_release_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:paddingLeft="16dp"
-                android:layout_alignTop="@+id/movie_thumbnail"
-                android:layout_alignBottom="@+id/movie_thumbnail"
-                android:layout_toRightOf="@+id/movie_thumbnail"
-                />
 
-            <Button
-                android:id="@+id/movie_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Favorite"
-                android:layout_below="@id/movie_thumbnail"
-                />
 
 
         </RelativeLayout>

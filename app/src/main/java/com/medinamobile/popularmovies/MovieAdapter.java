@@ -51,6 +51,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         }
         Context context = holder.itemView.getContext();
         String imageUrl = Utils.getUrlForMovieImage(movie.getPoster_path(), Utils.PARAMETER_SIZE_500);
+        //boolean isFavorite = Utils.isMovieFavorited(movie.)
         Picasso.with(context).load(imageUrl).placeholder(R.mipmap.ic_loading).into(holder.image);
         holder.position = position;
     }
@@ -68,8 +69,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
         @BindView(R.id.movie_image)
         ImageView image;
+        @Nullable @BindView(R.id.movie_favorite)
+        ImageView favorite;
         @Nullable @BindView(R.id.movie_original_title)
         TextView title;
+
         private int position;
 
         public ViewHolder(View itemView) {

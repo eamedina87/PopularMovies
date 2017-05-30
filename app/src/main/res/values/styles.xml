@@ -8,4 +8,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="DetailMovieTitle" parent="Base.TextAppearance.AppCompat.Title">
+    </style>
+
+    <style name="DetailMovieSubtitle" parent="Base.TextAppearance.AppCompat.Subhead">
+    </style>
+
+
+    <style name="DetailMovieOverview" parent="Base.TextAppearance.AppCompat.Body1">
+    </style>
+
 </resources>

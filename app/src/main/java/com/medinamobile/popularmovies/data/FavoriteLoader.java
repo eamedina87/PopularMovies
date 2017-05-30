@@ -75,7 +75,7 @@ public class FavoriteLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d(FavoriteLoader.class.getName(), "OnLoadFinished");
-
+        Log.d(FavoriteLoader.class.getName(), "dataPos:" + data.getPosition());
         if (data.getCount()==1){
             Movie movie = Utils.getMovieFromCursor(data);
             favoriteListener.onFavoriteMovieReady(movie);

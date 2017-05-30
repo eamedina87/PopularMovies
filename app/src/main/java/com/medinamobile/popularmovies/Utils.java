@@ -1,7 +1,9 @@
 package com.medinamobile.popularmovies;
 
 import android.database.Cursor;
+
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.medinamobile.popularmovies.data.Movie;
@@ -14,7 +16,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -26,13 +33,16 @@ import okhttp3.Response;
 
 public class Utils {
 
+    public static final int SORT_POPULAR = 1000;
+    public static final int SORT_TOP_RATED = 1001;
+    public static final int SORT_FAVORITE = 1002;
     private static final String URL_BASE = "http://api.themoviedb.org/3/movie/";
     public static final String PARAMETER_POPULAR = "popular";
     public static final String PARAMETER_TOP_RATED = "top_rated";
     private static final String QUERY_API = "api_key";
     /* THE API KEY must be obtained from The Movie Database
      https://www.themoviedb.org */
-    private static final String TMDB_API_KEY = "YOUR_API_KEY";
+    private static final String TMDB_API_KEY = "1008006bf5a5160b9e5907ac76def8f2";
 
     private static final String IMAGE_URL_BASE = "http://image.tmdb.org/t/p/";
     public static final String PARAMETER_SIZE_92 = "w92";
@@ -54,6 +64,13 @@ public class Utils {
     private static final String API_MOVIE_VOTE_AVERAGE = "vote_average";
     private static final String API_MOVIE_RELEASE_DATE = "release_date";
 
+    public static final String API_DATE_FORMAT = "yyyy-MM-dd";
+    public static final String KEY_MOVIES = "movies";
+    public static final String KEY_SORT_INDEX = "sortIndex";
+    public static final String KEY_URL = "url";
+    public static final String KEY_POPULAR_MOVIES = "popular_movies";
+    public static final String KEY_TOP_MOVIES = "top_movies";
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat(API_DATE_FORMAT);
 
     public static String getUrlStringSortedBy(String sort){
         Uri mUri =  Uri.parse(URL_BASE).buildUpon()
@@ -151,23 +168,42 @@ public class Utils {
         Movie movie = new Movie();
         movie.setRelease_date(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)));
         movie.setVote_average(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)));
-        movie.setOriginal_title(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE)));
+        movie.setOriginal_title(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE)).replace("'",""));
         movie.set_id(data.getInt(data.getColumnIndex(MovieContract.MovieEntry._ID)));
         movie.setBackdrop_path(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_BACKDROP_PATH)));
         movie.setPoster_path(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH)));
-        movie.setTitle(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE)));
+        movie.setTitle(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE)).replace("'",""));
         movie.setMovie_id(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID)));
-        movie.setOverview(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)));
+        movie.setOverview(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)).replace("'",""));
         return movie;
     }
 
     public static ArrayList<Movie> getMoviesFromCursor(Cursor data) {
         ArrayList<Movie> movies = new ArrayList<>();
-        data.moveToPosition(-1);
         while (data.moveToNext()){
             Movie movie = getMovieFromCursor(data);
             movies.add(movie);
         }
         return movies;
+    }
+
+
+    public static String getReleaseYear(String release_date) {
+        String out = null;
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dateFormat.parse(release_date));
+            out = "("+calendar.get(Calendar.YEAR)+")";
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+
+    public static Bundle createBundle(String url, int index) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Utils.KEY_URL, url);
+        bundle.putInt(Utils.KEY_SORT_INDEX, index);
+        return bundle;
     }
 }

@@ -8,8 +8,8 @@ import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -29,10 +29,8 @@ import butterknife.OnClick;
 
 //TODO Add Trailers
 //TODO Add Reviews
-//TODO Add Favorite Button
 //TODO Create Styles
 
-//(TODO) Favorite Movies not loading images
 public class MovieDetailActivity extends AppCompatActivity {
 
     private Movie movie;
@@ -51,7 +49,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     @BindView(R.id.movie_release_date)
     TextView release_date;
     @BindView(R.id.movie_favorite)
-    TextView btnFavorite;
+    AppCompatImageButton btnFavorite;
 
     private boolean isFavorite;
 
@@ -78,14 +76,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         Uri mUri = MovieContract.MovieEntry.FAVORITES_CONTENT_URI.buildUpon().appendPath(movie.getMovie_id()).build();
         Cursor cursor = getContentResolver().query(mUri, null, null, null, null);
         isFavorite = cursor.getCount()>0;
-        setFavoriteColor(isFavorite);
+        setFavoriteButtonState(isFavorite);
     }
 
-    private void setFavoriteColor(boolean favoriteValue) {
+    private void setFavoriteButtonState(boolean favoriteValue) {
         if (favoriteValue){
-            btnFavorite.setBackgroundColor(ContextCompat.getColor(this, R.color.colorAccent));
+            btnFavorite.setSelected(true);
         } else {
-            btnFavorite.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+            btnFavorite.setSelected(false);
         }
     }
 
@@ -105,12 +103,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         String ratingText = String.format(getString(R.string.rating_text), vote_average);
         rating_text.setText(ratingText);
         overview.setText(movie.getOverview());
-        String releaseString = String.format(getString(R.string.release_date), movie.getRelease_date());
+        //String releaseString = String.format(getString(R.string.release_date), movie.getRelease_date());
+        String releaseString = Utils.getReleaseYear(movie.getRelease_date());
         release_date.setText(releaseString);
     }
 
     @OnClick(R.id.movie_favorite)
     public void onFavoriteClicked(){
+
         if (!isFavorite){
             isFavorite = true;
             ContentValues values = getContentValues();
@@ -127,7 +127,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     null
                     );
         }
-        setFavoriteColor(isFavorite);
+        setFavoriteButtonState(isFavorite);
     }
 
     private ContentValues getContentValues() {
