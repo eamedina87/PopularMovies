@@ -32,13 +32,15 @@
         <activity
             android:name=".DetailScrollingActivity"
             android:label="@string/title_activity_detail_scrolling"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop"
+            android:parentActivityName=".MainActivity"
             >
+
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.medinamobile.popularmovies.MainActivity" />
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".MainActivity" />
+
         </activity>
 
         <provider

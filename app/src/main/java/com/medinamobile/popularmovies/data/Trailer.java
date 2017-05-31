@@ -11,8 +11,9 @@ public class Trailer implements Parcelable {
 
     private String name;
     private String size;
-    private String source;
+    private String key;
     private String type;
+    private String site;
 
     public static Parcelable.Creator CREATOR = new Parcelable.Creator(){
         public Trailer createFromParcel (Parcel parcel){
@@ -31,8 +32,9 @@ public class Trailer implements Parcelable {
     public Trailer(Parcel parcel) {
         setName(parcel.readString());
         setSize(parcel.readString());
-        setSource(parcel.readString());
+        setKey(parcel.readString());
         setType(parcel.readString());
+        setSite(parcel.readString());
     }
 
 
@@ -45,8 +47,9 @@ public class Trailer implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(getName());
         parcel.writeString(getSize());
-        parcel.writeString(getSource());
+        parcel.writeString(getKey());
         parcel.writeString(getType());
+        parcel.writeString(getSite());
     }
 
     public String getName() {
@@ -65,12 +68,12 @@ public class Trailer implements Parcelable {
         this.size = size;
     }
 
-    public String getSource() {
-        return source;
+    public String getKey() {
+        return key;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getType() {
@@ -79,5 +82,13 @@ public class Trailer implements Parcelable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSite() {
+        return site;
+    }
+
+    public void setSite(String site) {
+        this.site = site;
     }
 }

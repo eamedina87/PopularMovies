@@ -28,7 +28,8 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_launcher"
-
+            android:minHeight="60dp"
+            android:maxHeight="120dp"
             app:layout_constraintBottom_toBottomOf="@+id/movie_rating_text"
             app:layout_constraintTop_toTopOf="@+id/movie_original_title"
             app:layout_constraintLeft_toLeftOf="@+id/movie_overview"

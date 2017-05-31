@@ -71,17 +71,18 @@ public class JsonUtils {
         ArrayList<Trailer> trailers = null;
         try {
             JSONObject root = new JSONObject(stringResponse);
-            JSONArray results = root.getJSONArray(Constants.API_TRAILER_RESULTS);
+            JSONArray results = root.getJSONArray(Constants.API_RESULTS);
             if (results!=null && results.length()>0){
                 trailers = new ArrayList<>();
                 for (int cont=0; cont<results.length();cont++){
                     Trailer trailer = new Trailer();
                     JSONObject jsonReview = results.getJSONObject(cont);
                     trailer.setType(jsonReview.getString(Constants.API_TRAILER_TYPE));
-                    trailer.setSource(jsonReview.getString(Constants.API_TRAILER_SOURCE));
+                    trailer.setKey(jsonReview.getString(Constants.API_TRAILER_KEY));
                     trailer.setSize(jsonReview.getString(Constants.API_TRAILER_SIZE));
                     trailer.setName(jsonReview.getString(Constants.API_TRAILER_NAME));
-                    if (trailer.getType().equals(Constants.API_TRAILER_TYPE_TRAILER))  trailers.add(trailer);
+                    trailer.setSite(jsonReview.getString(Constants.API_TRAILER_SITE));
+                    if (trailer.getSite().equals(Constants.API_TRAILER_SITE_YOUTUBE))  trailers.add(trailer);
                 }
             }
         } catch (JSONException e) {

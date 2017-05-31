@@ -2,6 +2,7 @@ package com.medinamobile.popularmovies.loaders;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 import com.medinamobile.popularmovies.utils.APIUtils;
 import com.medinamobile.popularmovies.data.Trailer;
@@ -27,8 +28,10 @@ public class TrailersAsyncTaskLoader extends AsyncTaskLoader<ArrayList<Trailer>>
         super.onStartLoading();
         if (urlString==null){
             deliverResult(null);
+            Log.d("TrailersAsyncTask","CACHED_RESULT");
         } else {
             forceLoad();
+            Log.d("TrailersAsyncTask","INTERNET_CONNECTION_RESULT");
         }
 
     }

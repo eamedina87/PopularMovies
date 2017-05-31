@@ -5,17 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.medinamobile.popularmovies.adapters.ReviewAdapter;
 import com.medinamobile.popularmovies.adapters.TrailerAdapter;
@@ -36,7 +40,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-//(TODO) Use cached information of reviews and trailer on orientation changes
+
 public class DetailScrollingActivity extends AppCompatActivity implements ReviewsFromAPILoader.ReviewsLoadListener, TrailersFromAPILoader.TrailersLoadListener, ReviewAdapter.ReviewClickListener, TrailerAdapter.TrailerClickListener {
 
     @BindView(R.id.movie_image)
@@ -64,13 +68,13 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
     @BindView(R.id.movie_trailers)
     RecyclerView rv_trailers;
 
-    ProgressBar progressBarReviews;
-    ProgressBar progressBarTrailers;
-
     private Movie movie;
     private ArrayList<Review> reviews;
     private ArrayList<Trailer> trailers;
     private boolean isFavorite;
+
+    private Menu menu;
+    private ShareActionProvider shareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,28 +93,6 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
         }
     }
 
-    private void createReviewsLoaderCallbacks() {
-        String url = APIUtils.getUrlStringReviews(movie.getMovie_id());
-        ReviewsFromAPILoader loader = new ReviewsFromAPILoader(this, url, this);
-        loader.setReviews(reviews);
-        getSupportLoaderManager().initLoader(
-                Constants.ID_REVIEW_FROM_API_LOADER,
-                null,
-                loader
-                );
-    }
-
-    private void createTrailersLoaderCallbacks() {
-        String url = APIUtils.getUrlStringTrailers(movie.getMovie_id());
-        TrailersFromAPILoader loader = new TrailersFromAPILoader(this, url, this);
-        loader.setTrailers(trailers);
-        getSupportLoaderManager().initLoader(
-                Constants.ID_TRAILER_FROM_API_LOADER,
-                null,
-                loader
-        );
-
-    }
 
     @Override
     protected void onResume() {
@@ -140,6 +122,40 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        getMenuInflater().inflate(R.menu.detail, menu);
+        MenuItem item = menu.findItem(R.id.action_share);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        return true;
+    }
+
+
+    private void createReviewsLoaderCallbacks() {
+        String url = APIUtils.getUrlStringReviews(movie.getMovie_id());
+        ReviewsFromAPILoader loader = new ReviewsFromAPILoader(this, url, this);
+        loader.setReviews(reviews);
+        getSupportLoaderManager().initLoader(
+                Constants.ID_REVIEW_FROM_API_LOADER,
+                null,
+                loader
+                );
+    }
+
+    private void createTrailersLoaderCallbacks() {
+        String url = APIUtils.getUrlStringTrailers(movie.getMovie_id());
+        TrailersFromAPILoader loader = new TrailersFromAPILoader(this, url, this);
+        loader.setTrailers(trailers);
+        getSupportLoaderManager().initLoader(
+                Constants.ID_TRAILER_FROM_API_LOADER,
+                null,
+                loader
+        );
+
+    }
+
     private void setupActionBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -150,9 +166,13 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
         //Load image
         Context context = DetailScrollingActivity.this;
         String urlString = APIUtils.getUrlForMovieImage(movie.getBackdrop_path(), Constants.PARAMETER_SIZE_780);
-        Picasso.with(context).load(urlString).into(image);
+        Picasso.with(context).load(urlString)
+                .into(image);
         urlString = APIUtils.getUrlForMovieImage(movie.getPoster_path(), Constants.PARAMETER_SIZE_154);
-        Picasso.with(context).load(urlString).into(thumbnail);
+        Picasso.with(context).load(urlString)
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.placeholder_image)
+                .into(thumbnail);
         //--
         getSupportActionBar().setTitle(movie.getTitle());
         String vote_average = movie.getVote_average();
@@ -202,9 +222,24 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
             rv_trailers.setVisibility(View.VISIBLE);
             trailers_label.setVisibility(View.VISIBLE);
             setupTrailersList(trailers);
-
+            setupShareButton(trailers.get(0));
         }
 //        progressBarTrailers.setVisibility(View.INVISIBLE);
+    }
+
+    private void setupShareButton(Trailer trailer) {
+        if (shareActionProvider != null) {
+            menu.findItem(R.id.action_share).setVisible(true);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            String shareText = getString(R.string.share_text,
+                    trailer.getType(),
+                    movie.getTitle(),
+                    Utils.getTrailerUri(trailer).toString());
+            intent.putExtra(Intent.EXTRA_TEXT, shareText);
+            shareActionProvider.setShareIntent(intent);
+        }
     }
 
     @Override
@@ -234,12 +269,9 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
 
     @Override
     public void onReviewClicked(Review review) {
-        //Read More clicked
-        //Open Review Activity
         Intent intent = new Intent(this, ReviewActivity.class);
         intent.putExtra(Constants.KEY_REVIEW, review);
         startActivity(intent);
-
     }
 
     @Override

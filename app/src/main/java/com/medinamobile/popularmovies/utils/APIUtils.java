@@ -21,14 +21,15 @@ import okhttp3.Response;
  */
 
 public class APIUtils {
+
     public static String getUrlStringSortedBy(String sort){
+
+        String urlString = null;
         Uri mUri =  Uri.parse(Constants.URL_BASE).buildUpon()
                 .appendPath(sort)
                 .appendQueryParameter(Constants.QUERY_API, Constants.TMDB_API_KEY)
                 .build();
 
-
-        String urlString = null;
         try {
             URL mUrl = new URL(mUri.toString());
             urlString = mUrl.toString();
@@ -76,6 +77,24 @@ public class APIUtils {
         return urlString;
     }
 
+    public static String getUrlForMovieImage(String imagePath, String parameterSize) {
+        Uri mUri = Uri.parse(Constants.IMAGE_URL_BASE).buildUpon()
+                .appendPath(parameterSize)
+                .appendEncodedPath(imagePath)
+                .build();
+
+        String urlString = null;
+
+        try {
+            URL mUrl = new URL(mUri.toString());
+            urlString = mUrl.toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        urlString = urlString.replace("'","");
+        return urlString;
+    }
+
     public static ArrayList<Movie> getMovies(String urlString){
         ArrayList<Movie> movies = null;
 
@@ -98,23 +117,7 @@ public class APIUtils {
         return movies;
     }
 
-    public static String getUrlForMovieImage(String imagePath, String parameterSize) {
-        Uri mUri = Uri.parse(Constants.IMAGE_URL_BASE).buildUpon()
-                .appendPath(parameterSize)
-                .appendEncodedPath(imagePath)
-                .build();
 
-        String urlString = null;
-
-        try {
-            URL mUrl = new URL(mUri.toString());
-            urlString = mUrl.toString();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        urlString = urlString.replace("'","");
-        return urlString;
-    }
 
     public static ArrayList<Trailer> getTrailers(String urlString) {
         ArrayList<Trailer> trailers = null;
@@ -149,7 +152,7 @@ public class APIUtils {
             if (response.isSuccessful()){
                 String stringResponse = response.body().string();
                 reviews = JsonUtils.parseReviewsFromJson(stringResponse);
-                Log.d("APIUtils.getReviews", stringResponse);
+                //Log.d("APIUtils.getReviews", stringResponse);
             }
         } catch (IOException e) {
             e.printStackTrace();

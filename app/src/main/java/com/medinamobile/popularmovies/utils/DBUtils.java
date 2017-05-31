@@ -26,6 +26,7 @@ import okhttp3.Response;
 public class DBUtils {
     public static Movie getMovieFromCursor(Cursor data) {
         Movie movie = new Movie();
+        if (data.getPosition()==-1) data.moveToNext();
         movie.setRelease_date(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)));
         movie.setVote_average(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)));
         movie.setOriginal_title(data.getString(data.getColumnIndex(MovieContract.MovieEntry.COLUMN_ORIGINAL_TITLE)).replace("'",""));

@@ -42,7 +42,6 @@ public class FavoriteLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.d(FavoriteLoader.class.getName(), "OnCreateLoader");
         switch (id){
             case ID_FAVORITES_LOADER:{
                 Uri favoritesUri = MovieContract.MovieEntry.FAVORITES_CONTENT_URI;
@@ -76,17 +75,13 @@ public class FavoriteLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.d(FavoriteLoader.class.getName(), "OnLoadFinished");
-        Log.d(FavoriteLoader.class.getName(), "dataPos:" + data.getPosition());
-        if (data.getCount()==1){
-            Movie movie = DBUtils.getMovieFromCursor(data);
-            favoriteListener.onFavoriteMovieReady(movie);
-        } else {
+        //if (data.getCount()==1){
+        //    Movie movie = DBUtils.getMovieFromCursor(data);
+        //    favoriteListener.onFavoriteMovieReady(movie);
+        //} else {
             ArrayList<Movie> movies = DBUtils.getMoviesFromCursor(data);
             favoriteListener.onFavoritesReady(movies);
-        }
-
-
+        //}
     }
 
     @Override

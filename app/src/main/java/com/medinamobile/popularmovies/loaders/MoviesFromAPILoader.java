@@ -22,10 +22,11 @@ public class MoviesFromAPILoader implements LoaderManager.LoaderCallbacks<ArrayL
     private MoviesLoaderCallbacks moviesLoaderCallbacks;
     private ArrayList<Movie> popularMovies;
     private ArrayList<Movie> topMovies;
+    private ArrayList<Movie> favoriteMovies;
 
     public interface MoviesLoaderCallbacks{
         void onPreExecute();
-        void onPostExecute(ArrayList<Movie> movies);
+        void onPostExecute(ArrayList<Movie> movies, int sortType);
     }
 
     public MoviesFromAPILoader(Context context, MoviesLoaderCallbacks callbacks){
@@ -33,9 +34,10 @@ public class MoviesFromAPILoader implements LoaderManager.LoaderCallbacks<ArrayL
         this.moviesLoaderCallbacks = callbacks;
     }
 
-    public void setMovies(ArrayList<Movie> popular_movies, ArrayList<Movie> top_movies) {
+    public void setMovies(ArrayList<Movie> popular_movies, ArrayList<Movie> top_movies, ArrayList<Movie> favorite_movies) {
         popularMovies = popular_movies;
         topMovies = top_movies;
+        favoriteMovies = favorite_movies;
     }
 
     @Override
@@ -63,9 +65,11 @@ public class MoviesFromAPILoader implements LoaderManager.LoaderCallbacks<ArrayL
                 data = popularMovies;
             } else if (sortType == Constants.SORT_TOP_RATED){
                 data = topMovies;
+            } else if (sortType == Constants.SORT_FAVORITE){
+                data = favoriteMovies;
             }
         }
-        moviesLoaderCallbacks.onPostExecute(data);
+        moviesLoaderCallbacks.onPostExecute(data, sortType);
     }
 
     @Override

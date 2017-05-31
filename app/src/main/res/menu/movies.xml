@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item android:id="@+id/action_sort"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:title="@string/menu_sort"
         app:showAsAction="ifRoom|withText"
         >
@@ -18,7 +19,7 @@
                 android:orderInCategory="2"
                 android:title="@string/menu_sort_top_rated"
                 />
-            <!--DONE Create a Favorite Option Item-->
+
             <item android:id="@+id/action_sort_favorite"
                 android:orderInCategory="3"
                 android:title="@string/menu_sort_favorite"
@@ -27,4 +28,11 @@
         </group>
         </menu>
     </item>
+
+    <item android:id="@+id/action_refresh"
+        android:title="@string/action_refresh"
+        android:icon="@drawable/ic_action_refresh"
+        android:orderInCategory="1"
+        app:showAsAction="always"
+        />
 </menu>

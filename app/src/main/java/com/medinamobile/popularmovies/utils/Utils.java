@@ -37,7 +37,7 @@ public class Utils {
     public static Uri getTrailerUri(Trailer trailer) {
         Uri mUri = Uri.parse(Constants.YOUTUBE_URL_BASE).buildUpon()
                 .appendPath(Constants.YOUTUBE_WATCH_PATH)
-                .appendQueryParameter(Constants.PARAMETER_YOUTUBE_V, trailer.getSource()).build();
+                .appendQueryParameter(Constants.PARAMETER_YOUTUBE_V, trailer.getKey()).build();
 
         return mUri;
     }

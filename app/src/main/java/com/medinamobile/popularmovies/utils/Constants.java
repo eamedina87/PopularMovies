@@ -10,11 +10,12 @@ public class Constants {
     public static final int SORT_POPULAR = 1000;
     public static final int SORT_TOP_RATED = 1001;
     public static final int SORT_FAVORITE = 1002;
+
     public static final String URL_BASE = "http://api.themoviedb.org/3/movie/";
 
     public static final String PARAMETER_POPULAR = "popular";
     public static final String PARAMETER_TOP_RATED = "top_rated";
-    public static final String PARAMETER_TRAILERS = "trailers";
+    public static final String PARAMETER_TRAILERS = "videos";
     public static final String PARAMETER_REVIEWS = "reviews";
     public static final String QUERY_API = "api_key";
     /* THE API KEY must be obtained from The Movie Database
@@ -52,13 +53,16 @@ public class Constants {
     public static final String API_TRAILER_RESULTS = "youtube";
     public static final String API_TRAILER_NAME = "name";
     public static final String API_TRAILER_SIZE = "size";
-    public static final String API_TRAILER_SOURCE = "source";
+    public static final String API_TRAILER_KEY = "key";
+    public static final String API_TRAILER_SITE = "site";
+    public static final String API_TRAILER_SITE_YOUTUBE = "YouTube";
     public static final String API_TRAILER_TYPE = "type";
     public static final String API_TRAILER_TYPE_TRAILER = "Trailer";
     public static final String API_TRAILER_TYPE_CLIP = "Clip";
     public static final String API_TRAILER_TYPE_FEATURETTE = "Featurette";
 
     public static final String API_DATE_FORMAT = "yyyy-MM-dd";
+
     public static SimpleDateFormat dateFormat = new SimpleDateFormat(API_DATE_FORMAT);
 
     public static final String KEY_MOVIES = "movies";
@@ -70,6 +74,7 @@ public class Constants {
     public static final String KEY_URL = "url";
     public static final String KEY_POPULAR_MOVIES = "popular_movies";
     public static final String KEY_TOP_MOVIES = "top_movies";
+    public static final String KEY_FAVORITE_MOVIES = "favorite_movies";
     public static final String KEY_REVIEW = "review";
 
     public static final int ID_MOVIE_FROM_API_LOADER = 600;

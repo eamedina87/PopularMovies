@@ -28,8 +28,10 @@ public class ReviewsAsyncTaskLoader extends AsyncTaskLoader<ArrayList<Review>> {
         super.onStartLoading();
         if (reviewsUrl==null){
             deliverResult(null);
+            Log.d("ReviewsAsyncTask","CACHED_RESULT");
         } else {
             forceLoad();
+            Log.d("ReviewsAsyncTask","INTERNET_CONNECTION_RESULT");
         }
 
     }
@@ -37,7 +39,6 @@ public class ReviewsAsyncTaskLoader extends AsyncTaskLoader<ArrayList<Review>> {
     @Override
     public ArrayList<Review> loadInBackground() {
         ArrayList<Review> reviews = APIUtils.getReviews(reviewsUrl);
-        Log.d("MovieAsyncTaskLoader", "INTERNET_CONNECTION_RESULT");
         return reviews;
 
     }
