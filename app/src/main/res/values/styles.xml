@@ -15,6 +15,10 @@
 
     <style name="DetailMovieOverview" parent="Base.TextAppearance.AppCompat.Body1"></style>
 
+    <style name="ReviewContent" parent="DetailMovieOverview"/>
+
+    <style name="ReviewAuthor" parent="DetailMovieSubtitle"></style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -23,5 +27,17 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DetailMovieSectionTitle" parent="DetailMovieTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:background">@color/colorPrimaryLight</item>
+        <item name="android:textColor">@color/colorSecondaryText</item>
+    </style>
+
 
 </resources>

@@ -17,7 +17,7 @@
         android:layout_alignRight="@+id/movie_image"
         android:layout_alignTop="@+id/movie_original_title"
         android:layout_alignBottom="@+id/movie_image"
-        android:background="#ffffff"
+        android:background="@color/colorPrimaryLight"
         android:alpha="0.7"
         />
 
@@ -27,15 +27,12 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/movie_image"
         android:layout_alignBottom="@+id/movie_image"
-        android:layout_toRightOf="@+id/movie_rating_text"
-        android:layout_marginLeft="5dp"
         android:lines="1"
         android:ellipsize="end"
-        android:textSize="14sp"
-        android:text="@string/app_name"
+        android:textAppearance="@style/DetailMovieTitle"
+        android:textColor="@color/colorPrimaryText"
         android:gravity="center"
         android:padding="5dp"
-        android:textStyle="bold"
         />
 
 </RelativeLayout>

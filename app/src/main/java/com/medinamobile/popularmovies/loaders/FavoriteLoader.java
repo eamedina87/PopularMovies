@@ -9,7 +9,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
 
-import com.medinamobile.popularmovies.Utils;
+import com.medinamobile.popularmovies.utils.DBUtils;
 import com.medinamobile.popularmovies.data.Movie;
 import com.medinamobile.popularmovies.data.MovieContract;
 
@@ -79,10 +79,10 @@ public class FavoriteLoader implements LoaderManager.LoaderCallbacks<Cursor> {
         Log.d(FavoriteLoader.class.getName(), "OnLoadFinished");
         Log.d(FavoriteLoader.class.getName(), "dataPos:" + data.getPosition());
         if (data.getCount()==1){
-            Movie movie = Utils.getMovieFromCursor(data);
+            Movie movie = DBUtils.getMovieFromCursor(data);
             favoriteListener.onFavoriteMovieReady(movie);
         } else {
-            ArrayList<Movie> movies = Utils.getMoviesFromCursor(data);
+            ArrayList<Movie> movies = DBUtils.getMoviesFromCursor(data);
             favoriteListener.onFavoritesReady(movies);
         }
 

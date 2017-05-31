@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
-import com.medinamobile.popularmovies.Utils;
+import com.medinamobile.popularmovies.utils.Constants;
 import com.medinamobile.popularmovies.data.Movie;
 
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class MoviesFromAPILoader implements LoaderManager.LoaderCallbacks<ArrayList<Movie>>{
 
-    public static final int ID_MOVIE_FROM_API_LOADER = 600;
     private Context context;
     private int sortType;
 
@@ -42,11 +41,11 @@ public class MoviesFromAPILoader implements LoaderManager.LoaderCallbacks<ArrayL
     @Override
     public Loader<ArrayList<Movie>> onCreateLoader(int id, Bundle args) {
         moviesLoaderCallbacks.onPreExecute();
-        sortType = args.getInt(Utils.KEY_SORT_INDEX);
+        sortType = args.getInt(Constants.KEY_SORT_INDEX);
         String moviesUrl = null;
-        if (sortType==Utils.SORT_POPULAR && popularMovies==null
-                || sortType==Utils.SORT_TOP_RATED && topMovies==null ){
-            moviesUrl = args.getString(Utils.KEY_URL);
+        if (sortType== Constants.SORT_POPULAR && popularMovies==null
+                || sortType== Constants.SORT_TOP_RATED && topMovies==null ){
+            moviesUrl = args.getString(Constants.KEY_URL);
         }
         return new MovieAsyncTaskLoader(context, moviesUrl);
     }
@@ -54,15 +53,15 @@ public class MoviesFromAPILoader implements LoaderManager.LoaderCallbacks<ArrayL
     @Override
     public void onLoadFinished(Loader<ArrayList<Movie>> loader, ArrayList<Movie> data) {
         if (data!=null) {
-            if (sortType == Utils.SORT_POPULAR){
+            if (sortType == Constants.SORT_POPULAR){
                 popularMovies = data;
-            } else if (sortType == Utils.SORT_TOP_RATED){
+            } else if (sortType == Constants.SORT_TOP_RATED){
                 topMovies = data;
             }
         }else {
-            if (sortType == Utils.SORT_POPULAR){
+            if (sortType == Constants.SORT_POPULAR){
                 data = popularMovies;
-            } else if (sortType == Utils.SORT_TOP_RATED){
+            } else if (sortType == Constants.SORT_TOP_RATED){
                 data = topMovies;
             }
         }

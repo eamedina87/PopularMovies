@@ -1,7 +1,6 @@
-package com.medinamobile.popularmovies;
+package com.medinamobile.popularmovies.adapters;
 
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.medinamobile.popularmovies.R;
 import com.medinamobile.popularmovies.data.Movie;
+import com.medinamobile.popularmovies.utils.APIUtils;
+import com.medinamobile.popularmovies.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             holder.title.setText(movie.getTitle());
         }
         Context context = holder.itemView.getContext();
-        String imageUrl = Utils.getUrlForMovieImage(movie.getPoster_path(), Utils.PARAMETER_SIZE_500);
+        String imageUrl = APIUtils.getUrlForMovieImage(movie.getPoster_path(), Constants.PARAMETER_SIZE_500);
         //boolean isFavorite = Utils.isMovieFavorited(movie.)
         Picasso.with(context).load(imageUrl).placeholder(R.mipmap.ic_loading).into(holder.image);
         holder.position = position;

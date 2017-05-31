@@ -20,23 +20,31 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MovieDetailActivity" />
 
-        <provider
-            android:name=".data.MovieContentProvider"
-            android:authorities="com.medinamobile.popularmovies.data"
-            android:exported="false" />
+        <activity android:name=".ReviewActivity"
+            android:label="@string/review_title"
+            android:parentActivityName=".DetailScrollingActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.medinamobile.popularmovies.DetailScrollingActivity" />
+        </activity>
 
         <activity
             android:name=".DetailScrollingActivity"
             android:label="@string/title_activity_detail_scrolling"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.medinamobile.popularmovies.MainActivity" />
         </activity>
+
+        <provider
+            android:name=".data.MovieContentProvider"
+            android:authorities="com.medinamobile.popularmovies.data"
+            android:exported="false" />
     </application>
 
 </manifest>

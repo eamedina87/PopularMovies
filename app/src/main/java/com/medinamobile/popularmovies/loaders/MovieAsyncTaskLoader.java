@@ -4,7 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import com.medinamobile.popularmovies.Utils;
+import com.medinamobile.popularmovies.utils.APIUtils;
 import com.medinamobile.popularmovies.data.Movie;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class MovieAsyncTaskLoader extends AsyncTaskLoader<ArrayList<Movie>> {
             return null;
 
         } else {
-            ArrayList<Movie> movies = Utils.getMovies(moviesUrl);
+            ArrayList<Movie> movies = APIUtils.getMovies(moviesUrl);
             Log.d("MovieAsyncTaskLoader", "INTERNET_CONNECTION_RESULT");
             return movies;
         }
