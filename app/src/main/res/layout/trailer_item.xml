@@ -29,7 +29,9 @@
         app:layout_constraintLeft_toRightOf="@+id/imageView"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"/>
+        android:layout_marginRight="16dp"
+        tools:text="Title of the trailer"
+        />
 
     <TextView
         android:id="@+id/trailer_type"
@@ -37,7 +39,9 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/DetailMovieOverview"
         app:layout_constraintTop_toBottomOf="@+id/trailer_name"
-        app:layout_constraintLeft_toLeftOf="@+id/trailer_name" />
+        app:layout_constraintLeft_toLeftOf="@+id/trailer_name"
+        tools:text="Type"
+        />
 
     <TextView
         android:id="@+id/trailer_size"

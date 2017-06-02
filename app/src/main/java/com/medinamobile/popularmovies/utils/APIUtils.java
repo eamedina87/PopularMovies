@@ -3,6 +3,7 @@ package com.medinamobile.popularmovies.utils;
 import android.net.Uri;
 import android.util.Log;
 
+import com.medinamobile.popularmovies.BuildConfig;
 import com.medinamobile.popularmovies.data.Movie;
 import com.medinamobile.popularmovies.data.Review;
 import com.medinamobile.popularmovies.data.Trailer;
@@ -27,7 +28,7 @@ public class APIUtils {
         String urlString = null;
         Uri mUri =  Uri.parse(Constants.URL_BASE).buildUpon()
                 .appendPath(sort)
-                .appendQueryParameter(Constants.QUERY_API, Constants.TMDB_API_KEY)
+                .appendQueryParameter(Constants.QUERY_API, BuildConfig.TMDB_API_KEY)
                 .build();
 
         try {
@@ -45,7 +46,7 @@ public class APIUtils {
         Uri mUri =  Uri.parse(Constants.URL_BASE).buildUpon()
                 .appendPath(id)
                 .appendPath(Constants.PARAMETER_TRAILERS)
-                .appendQueryParameter(Constants.QUERY_API, Constants.TMDB_API_KEY)
+                .appendQueryParameter(Constants.QUERY_API, BuildConfig.TMDB_API_KEY)
                 .build();
 
         String urlString = null;
@@ -63,7 +64,7 @@ public class APIUtils {
         Uri mUri =  Uri.parse(Constants.URL_BASE).buildUpon()
                 .appendPath(id)
                 .appendPath(Constants.PARAMETER_REVIEWS)
-                .appendQueryParameter(Constants.QUERY_API, Constants.TMDB_API_KEY)
+                .appendQueryParameter(Constants.QUERY_API, BuildConfig.TMDB_API_KEY)
                 .build();
 
         String urlString = null;

@@ -18,9 +18,6 @@ public class Constants {
     public static final String PARAMETER_TRAILERS = "videos";
     public static final String PARAMETER_REVIEWS = "reviews";
     public static final String QUERY_API = "api_key";
-    /* THE API KEY must be obtained from The Movie Database
-         https://www.themoviedb.org */
-    public static final String TMDB_API_KEY = "YOUR_API_KEY";
 
     public static final String IMAGE_URL_BASE = "http://image.tmdb.org/t/p/";
     public static final String PARAMETER_SIZE_92 = "w92";
@@ -63,6 +60,7 @@ public class Constants {
 
     public static final String API_DATE_FORMAT = "yyyy-MM-dd";
 
+
     public static SimpleDateFormat dateFormat = new SimpleDateFormat(API_DATE_FORMAT);
 
     public static final String KEY_MOVIES = "movies";
@@ -76,6 +74,7 @@ public class Constants {
     public static final String KEY_TOP_MOVIES = "top_movies";
     public static final String KEY_FAVORITE_MOVIES = "favorite_movies";
     public static final String KEY_REVIEW = "review";
+    public static final String KEY_LIST_STATE = "list_state";
 
     public static final int ID_MOVIE_FROM_API_LOADER = 600;
     public static final int ID_REVIEW_FROM_API_LOADER = 700;

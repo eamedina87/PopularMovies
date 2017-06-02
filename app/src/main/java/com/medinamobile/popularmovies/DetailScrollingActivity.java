@@ -280,7 +280,9 @@ public class DetailScrollingActivity extends AppCompatActivity implements Review
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.setData(mUri);
-        startActivity(intent);
+        if (intent.resolveActivity(getPackageManager())!=null) {
+            startActivity(intent);
+        }
     }
 
     @Override

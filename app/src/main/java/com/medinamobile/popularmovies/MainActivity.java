@@ -1,6 +1,7 @@
 package com.medinamobile.popularmovies;
 
 import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -25,8 +26,6 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//(TODO) Detect Internet connection, low speeds
-//(TODO) Placeholder images for MainMenu, DetailView
 public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieListener,
          FavoriteLoader.FavoriteCallbacks, MoviesFromAPILoader.MoviesLoaderCallbacks {
 
@@ -47,13 +46,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private ArrayList<Movie> favorite_movies;
     private String urlString;
     private Menu menu;
+    private GridLayoutManager layoutManager;
+    private Parcelable listState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
 
         if (savedInstanceState==null){
             String parameter = Constants.PARAMETER_POPULAR;
@@ -62,11 +62,18 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             createMovieLoaderCallbacks();
         }
 
+        layoutManager = new GridLayoutManager(MainActivity.this,
+                2, LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (this.listState!=null){
+            layoutManager.onRestoreInstanceState(listState);
+        }
 
     }
 
@@ -90,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         outState.putParcelableArrayList(Constants.KEY_FAVORITE_MOVIES, favorite_movies);
         outState.putInt(Constants.KEY_SORT_INDEX,sortIndex);
         outState.putString(Constants.KEY_URL, urlString);
+        listState = layoutManager.onSaveInstanceState();
+        outState.putParcelable(Constants.KEY_LIST_STATE, listState);
         super.onSaveInstanceState(outState);
     }
 
@@ -101,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         this.favorite_movies = savedInstanceState.getParcelableArrayList(Constants.KEY_FAVORITE_MOVIES);
         this.sortIndex = savedInstanceState.getInt(Constants.KEY_SORT_INDEX);
         this.urlString = savedInstanceState.getString(Constants.KEY_URL);
+        this.listState = savedInstanceState.getParcelable(Constants.KEY_LIST_STATE);
         createMovieLoaderCallbacks();
         super.onRestoreInstanceState(savedInstanceState);
     }
@@ -267,9 +277,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         if (adapter==null){
-            GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this,
-                    2, LinearLayoutManager.VERTICAL, false);
-            recyclerView.setLayoutManager(layoutManager);
             adapter = new MovieAdapter(this.movies, this);
             recyclerView.setAdapter(adapter);
         } else {
