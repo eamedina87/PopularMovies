@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Popular Movies</string>
+    <string name="app_name">Popular Möviz</string>
     <string name="error_movies_load">An error ocurred. Please try again later.</string>
     <string name="menu_sort">Sort By</string>
     <string name="menu_sort_popular">Most Popular</string>
@@ -16,6 +16,6 @@
     <string name="review_btn_read_more">Read More</string>
     <string name="review_title">Review</string>
     <string name="action_share">Share</string>
-    <string name="share_text">Watch the %1$s for %2$s at %3$s via #PopularMovies</string>
+    <string name="share_text">Watch the %1$s for %2$s at %3$s via #PopularMöviz</string>
     <string name="action_refresh">Refresh</string>
 </resources>
